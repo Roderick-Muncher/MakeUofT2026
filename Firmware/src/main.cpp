@@ -1,6 +1,29 @@
 #include <Arduino.h>
 #include "buzzer.hpp"
 
+int melody[] = {262, 294, 330, 349, 392}; // C4, D4, E4, F4, G4
+unsigned int noteDuration = 500;
+int currentNote = 0;
+unsigned long lastNoteTime = 0;
+
+void updateBuzzer(int melody[]) {
+  unsigned long currentTime = millis();
+
+  // Only play the song if the "Muncher" is being pressed
+  if (currentTime - lastNoteTime >= noteDuration) {
+    tone(8, melody[currentNote], noteDuration);
+    
+    currentNote++;
+    if (currentNote >= (sizeof(melody) / sizeof(melody[0]))) currentNote = 0; // Reset song after G4
+    
+    lastNoteTime = currentTime; // Reset the timer
+  }
+  else {
+  noTone(8);
+  currentNote = 0; // Optional: Reset song to beginning if released
+  }
+}
+
 void setup() {
   // Set the serial monitor baudrate to 9600
   Serial.begin(9600);
@@ -31,24 +54,8 @@ void loop() {
   else{
     digitalWrite(13, LOW);
   }
-  	 
-  tone(buzzer, C4, 1000);  // Send 500 Hz sound signal
-  delay(1000);
-  noTone(9);
-  tone(buzzer, D4, 1000);  // Send 500 Hz sound signal
-  delay(1000);
-  noTone(9);
-  tone(buzzer, E4, 1000);  // Send 500 Hz sound signal
-  delay(1000);
-  noTone(9);	 
-  tone(buzzer, F4, 1000);  // Send 500 Hz sound signal
-  delay(1000);
-  noTone(9);  
-  tone(buzzer, G4, 1000);  // Send 500 Hz sound signal
-  delay(1000);
-  noTone(9);
 
-  tone(8, 440, 100);
+  updateBuzzer(melody);
 
   delay(1000);
 
