@@ -29,6 +29,22 @@ void loop() {
   else{
     digitalWrite(13, LOW);
   }
+  	 
+  tone(buzzer, C4, 1000);  // Send 500 Hz sound signal
+  delay(1000);
+  noTone(9);
+  tone(buzzer, D4, 1000);  // Send 500 Hz sound signal
+  delay(1000);
+  noTone(9);
+  tone(buzzer, E4, 1000);  // Send 500 Hz sound signal
+  delay(1000);
+  noTone(9);	 
+  tone(buzzer, F4, 1000);  // Send 500 Hz sound signal
+  delay(1000);
+  noTone(9);  
+  tone(buzzer, G4, 1000);  // Send 500 Hz sound signal
+  delay(1000);
+  noTone(9);
 
   delay(50);
 
