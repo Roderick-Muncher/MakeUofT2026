@@ -1,5 +1,6 @@
 #include <Arduino.h>
-#define A4 440
+
+
 
 void setup() {
   // Set the serial monitor baudrate to 9600
