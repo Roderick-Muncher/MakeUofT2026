@@ -6,29 +6,29 @@ void setup() {
   
   // Output LED Level 1
   pinMode(13,OUTPUT);
+  digitalWrite(13, LOW);
 }
 
 void loop() {
 
   int level;
   level = analogRead(0);
-  
-  // Print "Analog value:" in serial monitor
+
   Serial.println("Analog value:");
-  // Print output voltage in serial monitor
   Serial.println(level);
-  
-  // Turn off all the led initially
-  digitalWrite(13,LOW);
   
     // Splitting 1023 into 5 level => 200, 400, 600, 800, 1023
     // Based on the ADC output, LED indicates the level (1 to 5)
   
-  if (level>200)
+  if (level>90)
   {
-    // LEVEL 1 LED
-    digitalWrite(13,HIGH);
+    digitalWrite(13, HIGH);
   }
+  else{
+    digitalWrite(13, LOW);
+  }
+
+  delay(50);
 
   
 }
