@@ -1,6 +1,5 @@
 #include <Arduino.h>
-
-
+#include "buzzer.hpp"
 
 void setup() {
   // Set the serial monitor baudrate to 9600
@@ -9,6 +8,9 @@ void setup() {
   // Output LED Level 1
   pinMode(13,OUTPUT);
   digitalWrite(13, LOW);
+
+  pinMode(8,OUTPUT);
+  
 }
 
 void loop() {
@@ -30,7 +32,9 @@ void loop() {
     digitalWrite(13, LOW);
   }
 
-  delay(50);
+  tone(8, 440, 100);
+
+  delay(1000);
 
   
 }
