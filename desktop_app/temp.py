@@ -13,7 +13,10 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 import serial
 
-ser = serial.Serial("COM3", 115200, timeout=0) 
+ser = serial.Serial("COM9", 9600)
+ser.setDTR(True)
+ser.setRTS(True)
+time.sleep(2)
 
 start_time = time.time()
 
@@ -27,7 +30,7 @@ cpm_text = ""
 avg_force_text = ""
 pause_warnings = []
 pause_surfs = []
-
+random_force = 0
 
 def find_local_maxima(data):
     local_max_indices = []
@@ -55,26 +58,22 @@ canvas.draw()  # IMPORTANT: create the renderer once
 
 def update_plot():
     global force_feedback, cpm_text, avg_force_text, pause_warning
-    global pause, pause_start
+    global pause, pause_start, line, time_x, force_y, random_force
 
     t = time.time() - start_time
-    random_force = 0  # default value if no new serial data
 
-    if ser.in_waiting > 0:   # only read if data exists
-        line = ser.readline().decode(errors="ignore").strip()
-        try:
-            random_force = float(line)
-        except:
-            pass   # ignore bad lines
-
-    
-    # feedback
-    if random_force > 500:
-        force_feedback = "APPLY LESS FORCE"
-    elif 0 < random_force < 400:
-        force_feedback = "APPLY MORE FORCE"
-    else:
-        force_feedback = ""
+    if ser.in_waiting > 0:
+        raw_data = ser.read(ser.in_waiting).decode('utf-8', errors='ignore')
+        lines = [line.strip() for line in raw_data.split('\n') if line.strip()]
+        
+        if lines:
+            try:
+                latest_raw = lines[-1]
+                current_val = float(latest_raw)
+                random_force = current_val * 12
+                
+            except ValueError:
+                pass
 
     # check for long pause between forces (15s)
     if random_force == 0:
@@ -108,10 +107,19 @@ def update_plot():
         if intervals_avg > 0:
             current_cpm = int(60 / intervals_avg)
             cpm_text = f"Instantaneous cpm is {current_cpm} compressions/min"
+    
+    # feedback
 
     if len(max_forces) >= 1:
         max_force_avg = round(sum(max_forces) / len(max_forces), 2)
         avg_force_text = f"Average maximum force is {max_force_avg} N"
+        if max_force_avg > 500:
+            force_feedback = "APPLY LESS FORCE"
+        elif 0 < max_force_avg < 400:
+            force_feedback = "APPLY MORE FORCE"
+        else:
+            force_feedback = ""
+            print("Help")
 
     # sliding time window
     while time_x and (t - time_x[0]) > WINDOW:
@@ -174,7 +182,6 @@ while running:
     screen.blit(avg_surf, ((WIN_W - avg_surf.get_width()) / 2, 60))
     screen.blit(cpm_surf, ((WIN_W - cpm_surf.get_width()) / 2, 90))
     pause_surf_y = 120
-    print(pause_surfs)
     for pause_surf in pause_surfs:
         screen.blit(pause_surf, ((WIN_W - pause_surf.get_width()) / 2, pause_surf_y))
         pause_surf_y += 30
