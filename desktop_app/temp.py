@@ -44,8 +44,8 @@ ax.set_facecolor("#EDE5E8")
 (line,) = ax.plot([], [], color="#D0538D")
 
 ax.set_xlabel("Time (seconds)")
-ax.set_ylabel("Random Force (Newtons)")
-ax.set_title("Live Random Force vs Time", fontweight="bold")
+ax.set_ylabel("Force (Newtons)")
+ax.set_title("Live Force vs Time", fontweight="bold")
 
 canvas.draw()  # IMPORTANT: create the renderer once
 
