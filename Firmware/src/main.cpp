@@ -30,8 +30,6 @@ void loop() {
   int switchState = digitalRead(switchPin);
 
   if (switchState == 1) {
-
-    Serial.print("Analog value: ");
     Serial.println(level);
 
     updateFlash(myLastFlashTime, greentimeinterval, green);
@@ -40,11 +38,9 @@ void loop() {
 
     if (level > 90) {
       digitalWrite(blue, HIGH);
-      digitalWrite(red, HIGH);
     } 
     else {
       digitalWrite(blue, LOW);
-      digitalWrite(red, LOW);
     }
   } 
   
