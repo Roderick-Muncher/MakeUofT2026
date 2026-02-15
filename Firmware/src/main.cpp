@@ -9,7 +9,7 @@ int playmelody2 = 0;
 int previousState = 1;
 const int switchPin = 2;
 
-int mymelody[] = {D4, D4, D4, 0, D4, D4, D4, 0, D4, D4, D4, 0, 0, 0,0,0, D4, 0, D4, 0, F4, 0, D4, G4,0, 0, 0, 0, 0, 0, G4, F4, D4, D4, D4, 0, D4, D4, D4, 0, D4, D4, D4, 0, 0, 0, D4, 0, D4, 0, D4, 0, F4, 0, D4, 0, D4, 0, 0, 0, 0, 0, 0, 0};
+int mymelody[] = {D4, D4, D4, 0, D4, D4, D4, 0, D4, D4, D4, 0, 0, 0,0,0, D4, 0, D4, 0, F4, 0, D4, G4,0, 0, 0, 0, 0, 0, G4, F4, D4, D4, D4, 0, D4, D4, D4, 0, D4, D4, D4, 0, 0, 0, D4, 0, D4, 0, D4, 0, F4, 0, D4, G4, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int mymelody2[] = {1661,1661,1661,1661, 0, 1245,1245,1245,1245,0, 831, 831, 831, 831, 0, 932,932,932,932,0};
 int mynoteDuration2 = 50;
@@ -35,37 +35,30 @@ void loop() {
   int switchState = digitalRead(switchPin);
 
   if (previousState == 1 && switchState == 0) {
-      Serial.println("State Switched");
-      playmelody2 = 1;  // Set the flag
-      mycurrentNote = 0; // Reset note to start from the beginning
+      playmelody2 = 1;
+      mycurrentNote = 0;
   }
   previousState = switchState;
 
-  // 2. EXECUTION (Remove the '&& switchState == 0' condition)
   if (playmelody2 == 1) {
       updateBuzzer(mymelody2, mysize2, mylastNoteTime, mynoteDuration2, mybuzzerPin, mycurrentNote);
       
-      // Check if the melody is finished
-      Serial.println(mysize2);
       if (mycurrentNote >= mysize2 - 1) { 
-          playmelody2 = 0;      // Turn OFF the flag
-          noTone(mybuzzerPin);  // Silence the buzzer
-          mycurrentNote = 0;    // Reset for melody 1
-          Serial.println("Melody 2 Finished");
+          playmelody2 = 0;
+          noTone(mybuzzerPin);
+          mycurrentNote = 0;   
       }
   }
 
   previousState = switchState;
 
   if (switchState == 1) {
-
-    Serial.print("Analog value: ");
     Serial.println(level);
 
     updateFlash(myLastFlashTime, greentimeinterval, green);
     updateBuzzer(mymelody, mysize, mylastNoteTime, mynoteDuration, mybuzzerPin, mycurrentNote);
 
-    if (level > 90) {
+    if (level > 45) {
       digitalWrite(blue, HIGH);
       digitalWrite(red, HIGH);
     } 
@@ -77,9 +70,6 @@ void loop() {
   
   else {
     digitalWrite(green, LOW);
-
-
-
   }
   
   delay(10);
