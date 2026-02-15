@@ -5,7 +5,7 @@ void updateBuzzer(int melody[], int arraySize, unsigned long &lastNoteTime, int 
   unsigned long currentTime = millis();
 
   if (currentTime - lastNoteTime >= (unsigned long)noteDuration) {
-    tone(buzzerPin, melody[currentNote], noteDuration + 50);
+    tone(buzzerPin, melody[currentNote], noteDuration + 20);
     
     currentNote++;
     if (currentNote >= arraySize) currentNote = 0; 
