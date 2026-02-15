@@ -1,15 +1,15 @@
 #include <Arduino.h>
 #include "buzzer.hpp"
 #include "lights.hpp"
+#define D4 294
+#define F4 349
+#define G4 392
 
 int playmelody2 = 0;
 int previousState = 1;
 const int switchPin = 2;
 
-int mymelody[] = {
-294, 294, 0, 0, 294, 294, 0, 0, 294, 294, 0, 0, 0, 0, 294, 0, 294, 0, 294, 0, 349, 0, 294, 0, 392, 392, 0, 0, 0,
-294, 294, 0, 0, 294, 294, 0, 0, 294, 294, 0, 0, 0, 0, 294, 0, 294, 0, 294, 0, 349, 0, 394, 0, 294, 294, 0, 0, 0
-};
+int mymelody[] = {D4, D4, 0, 0, D4, D4, 0, 0, D4, D4, 0, 0, 0, 0, D4, 0, D4, 0, D4, 0, F4, 0, D4, 0, G4, G4, 0, 0, 0, D4, D4, 0, 0, D4, D4, 0, 0, D4, D4, 0, 0, 0, 0, D4, 0, D4, 0, D4, 0, F4, 0, G4, 0, D4, D4, 0, 0, 0};
 
 int mymelody2[] = {0, 1760, 0, 1319, 0, 880, 0, 988, 0, 1500, 0};
 
