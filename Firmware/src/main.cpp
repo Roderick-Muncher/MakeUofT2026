@@ -5,12 +5,12 @@
 const int switchPin = 2;
 
 int mymelody[] = {
-294, 294, 0, 294, 294, 0, 294, 294, 0, 0, 294, 0, 294, 0, 294, 0, 349, 0, 294, 0, 392, 392, 0, 0,
-294, 294, 0, 294, 294, 0, 294, 294, 0, 0, 294, 0, 294, 0, 294, 0, 349, 0, 394, 0, 294, 294, 0, 0
+294, 294, 0, 0, 294, 294, 0, 0, 294, 294, 0, 0, 0, 0, 294, 0, 294, 0, 294, 0, 349, 0, 294, 0, 392, 392, 0, 0, 0,
+294, 294, 0, 0, 294, 294, 0, 0, 294, 294, 0, 0, 0, 0, 294, 0, 294, 0, 294, 0, 349, 0, 394, 0, 294, 294, 0, 0, 0
 };
 
 int mysize = sizeof(mymelody) / sizeof(mymelody[0]);
-int mynoteDuration = 250;
+int mynoteDuration = 100;
 int mycurrentNote = 0;
 unsigned long mylastNoteTime = 0;
 unsigned long myLastFlashTime = 0;
@@ -46,7 +46,6 @@ void loop() {
       digitalWrite(blue, LOW);
       digitalWrite(red, LOW);
     }
-
   } 
   
   else {
