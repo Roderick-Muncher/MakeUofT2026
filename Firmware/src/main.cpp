@@ -46,7 +46,6 @@ void loop() {
       digitalWrite(blue, LOW);
       digitalWrite(red, LOW);
     }
-
   } 
   
   else {
