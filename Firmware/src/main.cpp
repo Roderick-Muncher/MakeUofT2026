@@ -9,7 +9,10 @@ int mymelody[] = {
 294, 294, 0, 0, 294, 294, 0, 0, 294, 294, 0, 0, 0, 0, 294, 0, 294, 0, 294, 0, 349, 0, 394, 0, 294, 294, 0, 0, 0
 };
 
+int mymelody2[] = {1760, 1319, 880, 988};
+
 int mysize = sizeof(mymelody) / sizeof(mymelody[0]);
+int mysize2 = sizeof(mymelody2) / sizeof(mymelody2[0]);
 int mynoteDuration = 100;
 int mycurrentNote = 0;
 unsigned long mylastNoteTime = 0;
@@ -35,6 +38,8 @@ void loop() {
     Serial.println(level);
 
     updateFlash(myLastFlashTime, greentimeinterval, green);
+    // updateBuzzer(mymelody2, mysize2, mylastNoteTime, mynoteDuration, mybuzzerPin, mycurrentNote);
+
 
     updateBuzzer(mymelody, mysize, mylastNoteTime, mynoteDuration, mybuzzerPin, mycurrentNote);
 
