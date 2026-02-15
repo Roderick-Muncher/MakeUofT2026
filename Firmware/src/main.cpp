@@ -10,9 +10,10 @@ int mymelody[] = {
 };
 
 int mysize = sizeof(mymelody) / sizeof(mymelody[0]);
-int mynoteDuration = 120;
+int mynoteDuration = 250;
 int mycurrentNote = 0;
 unsigned long mylastNoteTime = 0;
+unsigned long myLastFlashTime = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -28,24 +29,29 @@ void loop() {
   int level = analogRead(0);
   int switchState = digitalRead(switchPin);
 
-  Serial.print("Analog value: ");
-  Serial.println(level);
-
   if (switchState == 1) {
+
+    Serial.print("Analog value: ");
+    Serial.println(level);
+
+    updateFlash(myLastFlashTime, greentimeinterval, green);
+
     updateBuzzer(mymelody, mysize, mylastNoteTime, mynoteDuration, mybuzzerPin, mycurrentNote);
+
     if (level > 90) {
       digitalWrite(blue, HIGH);
       digitalWrite(red, HIGH);
-      digitalWrite(green, HIGH); } 
+    } 
     else {
       digitalWrite(blue, LOW);
       digitalWrite(red, LOW);
-      digitalWrite(green, LOW);
     }
+
   } 
   
   else {
     noTone(mybuzzerPin);
+    digitalWrite(green, LOW);
   }
 
   delay(10);
