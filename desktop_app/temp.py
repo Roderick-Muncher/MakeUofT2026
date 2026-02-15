@@ -1,4 +1,4 @@
-#code for generating random force
+#code for generating force
 #display spike of force, value of force, force vs time graph on computer screen
 #change of peak of force (instantaneous)
 #long time of pause between forces like more than 15s than record time where pause happens
@@ -13,7 +13,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 import serial
 
-ser = serial.Serial("COM9", 9600)
+ser = serial.Serial("COM3", 9600)
 ser.setDTR(True)
 ser.setRTS(True)
 time.sleep(2)
@@ -30,7 +30,7 @@ cpm_text = ""
 avg_force_text = ""
 pause_warnings = []
 pause_surfs = []
-random_force = 0
+force = 0
 
 def find_local_maxima(data):
     local_max_indices = []
@@ -43,7 +43,7 @@ def find_local_maxima(data):
 
     return local_max_indices
 
-fig = Figure(figsize=(8, 4), dpi=100)  # ~1000x400 px
+fig = Figure(figsize=(8, 4), dpi=100)  # ~800x400 px
 canvas = FigureCanvas(fig)
 ax = fig.add_subplot(111)
 
@@ -58,7 +58,7 @@ canvas.draw()  # IMPORTANT: create the renderer once
 
 def update_plot():
     global force_feedback, cpm_text, avg_force_text, pause_warning
-    global pause, pause_start, line, time_x, force_y, random_force
+    global pause, pause_start, line, time_x, force_y, force
 
     t = time.time() - start_time
 
@@ -70,26 +70,26 @@ def update_plot():
             try:
                 latest_raw = lines[-1]
                 current_val = float(latest_raw)
-                random_force = current_val * 12
+                force = current_val * 12
                 
             except ValueError:
                 pass
 
     # check for long pause between forces (15s)
-    if random_force == 0:
+    if force <= 120:
         pause = True
-        if len(force_y) > 0 and force_y[-1] > 0:
+        if len(force_y) > 0 and force_y[-1] > 120:
             pause_start = time.time()
 
-    if random_force > 0:
+    if force > 120:
         pause = False
-    #change back to 15 
-    if pause and (time.time() - pause_start) >= 2:
+
+    if pause and (time.time() - pause_start) >= 15 and t > 5:
         pause_warnings.append(f"Possible use of AED @time: {round(t, 2)} seconds")
         pause_start = time.time()
 
     time_x.append(t)
-    force_y.append(random_force)
+    force_y.append(force)
 
     # maxima + cpm
     indices = find_local_maxima(force_y)
@@ -109,7 +109,6 @@ def update_plot():
             cpm_text = f"Instantaneous cpm is {current_cpm} compressions/min"
     
     # feedback
-
     if len(max_forces) >= 1:
         max_force_avg = round(sum(max_forces) / len(max_forces), 2)
         avg_force_text = f"Average maximum force is {max_force_avg} N"
@@ -119,7 +118,6 @@ def update_plot():
             force_feedback = "APPLY MORE FORCE"
         else:
             force_feedback = ""
-            print("Help")
 
     # sliding time window
     while time_x and (t - time_x[0]) > WINDOW:
@@ -134,7 +132,7 @@ def update_plot():
     canvas.draw()
 
 def mpl_to_pygame_surface():
-    """Convert current Matplotlib canvas to a Pygame Surface."""
+    #Convert current Matplotlib canvas to a Pygame Surface
     w, h = canvas.get_width_height()
     rgba = canvas.buffer_rgba()  # memoryview of RGBA bytes (requires canvas.draw() first)
     return pygame.image.frombuffer(rgba, (w, h), "RGBA")
