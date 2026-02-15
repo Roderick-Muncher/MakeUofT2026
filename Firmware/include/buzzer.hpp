@@ -1,5 +1,3 @@
-#include <Arduino.h>
-
 //Define
 #define C4   261.63
 #define CS4  277.18   // C#4 / Db4

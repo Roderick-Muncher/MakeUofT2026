@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <Arduino.h>
 #include "buzzer.hpp"
 
@@ -6,6 +7,10 @@ const int buzzerPin = 8;
 unsigned int noteDuration = 500;
 int currentNote = 0;
 unsigned long lastNoteTime = 0;
+
+
+//test
+
 
 void updateBuzzer() {
   unsigned long currentTime = millis();
@@ -19,3 +24,6 @@ void updateBuzzer() {
     lastNoteTime = currentTime; 
   }
 }
+=======
+#include "buzzer.hpp"
+>>>>>>> adfeba7f30fc00ace0f3b209cab2d67cbcf100a5
