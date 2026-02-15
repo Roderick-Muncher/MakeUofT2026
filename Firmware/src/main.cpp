@@ -54,17 +54,16 @@ void loop() {
 
   if (switchState == 1) {
     Serial.println(level);
+    Serial.println(level); // Send a big, obvious number
 
     updateFlash(myLastFlashTime, greentimeinterval, green);
     updateBuzzer(mymelody, mysize, mylastNoteTime, mynoteDuration, mybuzzerPin, mycurrentNote);
 
     if (level > 45) {
       digitalWrite(blue, HIGH);
-      digitalWrite(red, HIGH);
     } 
     else {
       digitalWrite(blue, LOW);
-      digitalWrite(red, LOW);
     }
   } 
   
