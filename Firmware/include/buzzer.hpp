@@ -1,4 +1,10 @@
 //Define
+#ifndef BUZZER_HPP
+#define BUZZER_HPP
+#include <Arduino.h>
+
+void updateBuzzer(int melody[], int arraySize, unsigned long &lastNoteTime, int noteDuration, int buzzerPin, int &currentNote);
+
 #define C4   261.63
 #define CS4  277.18   // C#4 / Db4
 #define DF4  277.18
@@ -23,3 +29,7 @@
 #define BF4  466.16
 
 #define B4   493.88
+
+const int mybuzzerPin = 8;
+
+#endif
