@@ -77,7 +77,7 @@ def update_plot():
             try:
                 latest_raw = lines[-1]
                 current_val = float(latest_raw)
-                force = current_val * 20
+                force = current_val * 1.5
                 
             except ValueError:
                 pass

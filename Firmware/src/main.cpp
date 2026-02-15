@@ -60,14 +60,14 @@ void loop() {
     updateFlash(myLastFlashTime, greentimeinterval, green);
     updateBuzzer(mymelody, mysize, mylastNoteTime, mynoteDuration, mybuzzerPin, mycurrentNote);
 
-    if (level > 30) {
+    if (level > 200) {
       digitalWrite(blue, HIGH);
     } 
     else {
       digitalWrite(blue, LOW);
     }
 
-    if (((level + previouslevel) / 2) > 74){
+    if (((level + previouslevel) / 2) > 470){
       digitalWrite(red, HIGH);
     }
     else{
