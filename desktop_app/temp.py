@@ -36,7 +36,7 @@ def find_local_maxima(data):
 
     return local_max_indices
 
-fig = Figure(figsize=(7, 4), dpi=100)  # ~700x400 px
+fig = Figure(figsize=(8, 4), dpi=100)  # ~1000x400 px
 canvas = FigureCanvas(fig)
 ax = fig.add_subplot(111)
 
@@ -80,7 +80,7 @@ def update_plot():
         pause = False
     #change back to 15 
     if pause and (time.time() - pause_start) >= 2:
-        pause_warnings.append(f"TOO LONG pause between forces, @time: {round(t, 2)} seconds")
+        pause_warnings.append(f"Possible use of AED @time: {round(t, 2)} seconds")
         pause_start = time.time()
 
     time_x.append(t)
@@ -105,7 +105,7 @@ def update_plot():
 
     if len(max_forces) >= 1:
         max_force_avg = round(sum(max_forces) / len(max_forces), 2)
-        avg_force_text = f"The average maximum force is {max_force_avg} N"
+        avg_force_text = f"Average maximum force is {max_force_avg} N"
 
     # sliding time window
     while time_x and (t - time_x[0]) > WINDOW:
@@ -175,7 +175,7 @@ while running:
 
     # blit the matplotlib plot into pygame
     plot_surface = mpl_to_pygame_surface()
-    screen.blit(plot_surface, (150, 300))
+    screen.blit(plot_surface, (100, 280))
 
     pygame.display.flip()
 
