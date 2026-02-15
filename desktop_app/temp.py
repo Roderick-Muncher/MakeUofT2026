@@ -36,7 +36,7 @@ def find_local_maxima(data):
 
     return local_max_indices
 
-fig = Figure(figsize=(8, 4), dpi=100)  # ~1000x400 px
+fig = Figure(figsize=(8, 4), dpi=100)  # ~800x400 px
 canvas = FigureCanvas(fig)
 ax = fig.add_subplot(111)
 
@@ -78,7 +78,7 @@ def update_plot():
 
     if random_force > 0:
         pause = False
-    #change back to 15 
+    #CHANGE BACK TO 15 
     if pause and (time.time() - pause_start) >= 2:
         pause_warnings.append(f"Possible use of AED @time: {round(t, 2)} seconds")
         pause_start = time.time()
