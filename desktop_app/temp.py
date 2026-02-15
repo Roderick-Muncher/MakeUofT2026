@@ -13,7 +13,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 import serial
 
-ser = serial.Serial("COM3", 9600)
+ser = serial.Serial("COM9", 9600)
 ser.setDTR(True)
 ser.setRTS(True)
 time.sleep(2)
@@ -83,8 +83,8 @@ def update_plot():
 
     if force > 120:
         pause = False
-    #change back to 15 
-    if pause and (time.time() - pause_start) >= 2:
+
+    if pause and (time.time() - pause_start) >= 15 and t > 5:
         pause_warnings.append(f"Possible use of AED @time: {round(t, 2)} seconds")
         pause_start = time.time()
 

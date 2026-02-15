@@ -38,7 +38,6 @@ void loop() {
       playmelody2 = 1;
       mycurrentNote = 0;
   }
-  previousState = switchState;
 
   if (playmelody2 == 1) {
       updateBuzzer(mymelody2, mysize2, mylastNoteTime, mynoteDuration2, mybuzzerPin, mycurrentNote);
