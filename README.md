@@ -2,6 +2,8 @@
 
 MakeUofT2026 Project: No One Bites The Dust (Wearable CPR Guide)
 
+Winner (Category)
+
 # Inspiration
 
 Current CPR training relies heavily on vague instructions and limited-access mannequins. Trainees often practice on layered plastic with minimal feedback, making it difficult to objectively evaluate compression rate and force.
