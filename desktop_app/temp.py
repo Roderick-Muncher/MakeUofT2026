@@ -11,6 +11,10 @@ matplotlib.use("Agg")  # IMPORTANT: draw off-screen (no Matplotlib window)
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
+import serial
+
+ser = serial.Serial("COM3", 115200, timeout=0) 
+
 start_time = time.time()
 
 time_x = []
@@ -54,14 +58,16 @@ def update_plot():
     global pause, pause_start
 
     t = time.time() - start_time
-    #random_force = randint(0, 700)
-    #below code for testing purposes
-    if 2 < t < 5 or 7 < t < 10:
-        random_force = 0
-    else:
-        random_force = randint(0, 700)
-    
+    random_force = 0  # default value if no new serial data
 
+    if ser.in_waiting > 0:   # only read if data exists
+        line = ser.readline().decode(errors="ignore").strip()
+        try:
+            random_force = float(line)
+        except:
+            pass   # ignore bad lines
+
+    
     # feedback
     if random_force > 500:
         force_feedback = "APPLY LESS FORCE"
