@@ -16,9 +16,14 @@ start_time = time.time()
 time_x = []
 force_y = []
 WINDOW = 10
-
 pause = False
-pause_start = 0.0
+pause_start = 0
+force_feedback = ""
+cpm_text = ""
+avg_force_text = ""
+pause_warnings = []
+pause_surfs = []
+
 
 def find_local_maxima(data):
     local_max_indices = []
@@ -45,30 +50,38 @@ ax.set_title("Live Random Force vs Time", fontweight="bold")
 canvas.draw()  # IMPORTANT: create the renderer once
 
 def update_plot():
+    global force_feedback, cpm_text, avg_force_text, pause_warning
     global pause, pause_start
 
     t = time.time() - start_time
-    random_force = randint(0, 700)
+    #random_force = randint(0, 700)
     #below code for testing purposes
-    '''if t > 2:
-        random_force = 0'''
+    if 2 < t < 5 or 7 < t < 10:
+        random_force = 0
+    else:
+        random_force = randint(0, 700)
+    
 
     # feedback
     if random_force > 500:
-        print("Apply less force")
+        force_feedback = "APPLY LESS FORCE"
     elif 0 < random_force < 400:
-        print("Apply more force")
+        force_feedback = "APPLY MORE FORCE"
+    else:
+        force_feedback = ""
 
     # check for long pause between forces (15s)
-    if random_force == 0 and len(force_y) > 0 and force_y[-1] > 0:
+    if random_force == 0:
         pause = True
-        pause_start = time.time()
+        if len(force_y) > 0 and force_y[-1] > 0:
+            pause_start = time.time()
 
     if random_force > 0:
         pause = False
-
-    if pause and (time.time() - pause_start) >= 15:
-        print(f"TOO LONG pause between forces, @time:{round(t, 2)} seconds")
+    #change back to 15 
+    if pause and (time.time() - pause_start) >= 2:
+        pause_warnings.append(f"TOO LONG pause between forces, @time: {round(t, 2)} seconds")
+        pause_start = time.time()
 
     time_x.append(t)
     force_y.append(random_force)
@@ -88,11 +101,11 @@ def update_plot():
         intervals_avg = sum(three_intervals) / 3
         if intervals_avg > 0:
             current_cpm = int(60 / intervals_avg)
-            print(f"Instantaneous cpm is {current_cpm} compressions/min")
+            cpm_text = f"Instantaneous cpm is {current_cpm} compressions/min"
 
     if len(max_forces) >= 1:
         max_force_avg = round(sum(max_forces) / len(max_forces), 2)
-        print(f"The average maximum force is {max_force_avg}")
+        avg_force_text = f"The average maximum force is {max_force_avg} N"
 
     # sliding time window
     while time_x and (t - time_x[0]) > WINDOW:
@@ -115,6 +128,7 @@ def mpl_to_pygame_surface():
 
 #Pygame setup 
 pygame.init()
+font = pygame.font.SysFont("San Francisco", 28)   # default font, size 28
 
 WIN_W, WIN_H = 1000, 700
 screen = pygame.display.set_mode((WIN_W, WIN_H))
@@ -141,10 +155,27 @@ while running:
 
     # draw pygame background (window)
     screen.fill((173, 216, 230))  # light blue
+    pause_surfs = []
+    # render text surfaces
+    feedback_surf = font.render(force_feedback, True, (200,0,0))
+    cpm_surf = font.render(cpm_text, True, (0,0,0))
+    avg_surf = font.render(avg_force_text, True, (0,0,0))
+    for pause_warning in pause_warnings:
+        pause_surfs.append(font.render(pause_warning, True, (0,0,0)))
+
+    # draw them on screen
+    screen.blit(feedback_surf, ((WIN_W - feedback_surf.get_width()) / 2, 30))
+    screen.blit(avg_surf, ((WIN_W - avg_surf.get_width()) / 2, 60))
+    screen.blit(cpm_surf, ((WIN_W - cpm_surf.get_width()) / 2, 90))
+    pause_surf_y = 120
+    print(pause_surfs)
+    for pause_surf in pause_surfs:
+        screen.blit(pause_surf, ((WIN_W - pause_surf.get_width()) / 2, pause_surf_y))
+        pause_surf_y += 30
 
     # blit the matplotlib plot into pygame
     plot_surface = mpl_to_pygame_surface()
-    screen.blit(plot_surface, (150, 150))
+    screen.blit(plot_surface, (150, 300))
 
     pygame.display.flip()
 
