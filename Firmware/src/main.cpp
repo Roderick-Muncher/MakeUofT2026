@@ -9,6 +9,8 @@ int playmelody2 = 0;
 int previousState = 1;
 const int switchPin = 2;
 
+int previouslevel = 0;
+
 int mymelody[] = {D4, D4, D4, 0, D4, D4, D4, 0, D4, D4, D4, 0, 0, 0,0,0, D4, 0, D4, 0, F4, 0, D4, G4,0, 0, 0, 0, 0, 0, G4, F4, D4, D4, D4, 0, D4, D4, D4, 0, D4, D4, D4, 0, 0, 0, D4, 0, D4, 0, D4, 0, F4, 0, D4, G4, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int mymelody2[] = {1661,1661,1661,1661, 0, 1245,1245,1245,1245,0, 831, 831, 831, 831, 0, 932,932,932,932,0};
@@ -19,6 +21,7 @@ int mynoteDuration = 125;
 int mycurrentNote = 0;
 unsigned long mylastNoteTime = 0;
 unsigned long myLastFlashTime = 0;
+unsigned long myLastFlashTimered = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -53,22 +56,31 @@ void loop() {
 
   if (switchState == 1) {
     Serial.println(level);
-    Serial.println(level); // Send a big, obvious number
 
     updateFlash(myLastFlashTime, greentimeinterval, green);
     updateBuzzer(mymelody, mysize, mylastNoteTime, mynoteDuration, mybuzzerPin, mycurrentNote);
 
-    if (level > 45) {
+    if (level > 30) {
       digitalWrite(blue, HIGH);
     } 
     else {
       digitalWrite(blue, LOW);
     }
+
+    if (((level + previouslevel) / 2) > 74){
+      digitalWrite(red, HIGH);
+    }
+    else{
+      digitalWrite(red, LOW);
+    }
   } 
   
   else {
     digitalWrite(green, LOW);
+    digitalWrite(red, LOW);
   }
   
+  previouslevel = level;
+
   delay(10);
 }

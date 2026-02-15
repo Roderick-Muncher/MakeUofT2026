@@ -9,6 +9,7 @@ const int red = 12;
 const int green = 11;
 
 const int greentimeinterval = 500;
+const int redtimeinterval = 100;
 
 
 #endif

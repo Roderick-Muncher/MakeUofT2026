@@ -13,6 +13,10 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 import serial
 
+import os
+from dotenv import load_dotenv
+from elevenlabs.client import ElevenLabs
+
 ser = serial.Serial("COM9", 9600)
 ser.setDTR(True)
 ser.setRTS(True)
@@ -31,6 +35,8 @@ avg_force_text = ""
 pause_warnings = []
 pause_surfs = []
 force = 0
+high_force_one = False
+low_force_one = False
 
 def find_local_maxima(data):
     local_max_indices = []
@@ -59,6 +65,7 @@ canvas.draw()  # IMPORTANT: create the renderer once
 def update_plot():
     global force_feedback, cpm_text, avg_force_text, pause_warning
     global pause, pause_start, line, time_x, force_y, force
+    global low_force_one, high_force_one, sound_increase, sound_decrease
 
     t = time.time() - start_time
 
@@ -70,7 +77,7 @@ def update_plot():
             try:
                 latest_raw = lines[-1]
                 current_val = float(latest_raw)
-                force = current_val * 12
+                force = current_val * 20
                 
             except ValueError:
                 pass
@@ -114,8 +121,14 @@ def update_plot():
         avg_force_text = f"Average maximum force is {max_force_avg} N"
         if max_force_avg > 500:
             force_feedback = "APPLY LESS FORCE"
+            if low_force_one == False:
+                sound_decrease.play()
+                low_force_one = True
         elif 0 < max_force_avg < 400:
             force_feedback = "APPLY MORE FORCE"
+            if high_force_one == False:
+                sound_increase.play()
+                high_force_one = True
         else:
             force_feedback = ""
 
@@ -151,10 +164,37 @@ clock = pygame.time.Clock()
 PLOT_UPDATE_MS = 200
 accum_ms = 0
 
+load_dotenv()
+client = ElevenLabs(api_key=os.getenv("ELEVEN_API_KEY"))
+
+pygame.mixer.init()
+
+print("Preparing voice...")
+audio = client.text_to_speech.convert(
+    text="Glove system online. Ready to measure force.",
+    voice_id="JBFqnCBsd6RMkjVDRZzb", 
+    model_id="eleven_multilingual_v2"
+)
+with open("speech.mp3", "wb") as f:
+    for chunk in audio:
+        f.write(chunk)
+
+pygame.mixer.music.load("speech.mp3")
+sound_increase = pygame.mixer.Sound("desktop_app/increase.mp3")
+sound_decrease = pygame.mixer.Sound("desktop_app/decrease.mp3")
+has_announced_start = False
+low_force_once = False
+high_force_once = False
+
 running = True
 while running:
     dt_ms = clock.tick(60)  # run pygame at up to 60 FPS
     accum_ms += dt_ms
+
+    if not has_announced_start:
+        pygame.mixer.music.play()
+        has_announced_start = True
+        dt_ms = clock.tick(60)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
