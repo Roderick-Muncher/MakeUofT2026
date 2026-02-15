@@ -9,10 +9,10 @@ int playmelody2 = 0;
 int previousState = 1;
 const int switchPin = 2;
 
-int mymelody[] = {D4, D4, 0, 0, D4, D4, 0, 0, D4, D4, 0, 0, 0, 0, D4, 0, D4, 0, D4, 0, F4, 0, D4, 0, G4, G4, 0, 0, 0, D4, D4, 0, 0, D4, D4, 0, 0, D4, D4, 0, 0, 0, 0, D4, 0, D4, 0, D4, 0, F4, 0, G4, 0, D4, D4, 0, 0, 0};
+int mymelody[] = {D4, D4, D4, 0, D4, D4, D4, 0, D4, D4, D4, 0, 0, 0,0,0, D4, 0, D4, 0, F4, 0, D4, G4,0, 0, 0, 0, 0, 0, G4, F4, D4, D4, D4, 0, D4, D4, D4, 0, D4, D4, D4, 0, 0, 0, D4, 0, D4, 0, D4, 0, F4, 0, D4, G4, 0, 0, 0, 0, 0, 0, 0, 0};
 
-int mymelody2[] = {0, 1760, 0, 1319, 0, 880, 0, 988, 0, 1500, 0};
-
+int mymelody2[] = {1661,1661,1661,1661, 0, 1245,1245,1245,1245,0, 831, 831, 831, 831, 0, 932,932,932,932,0};
+int mynoteDuration2 = 50;
 int mysize = sizeof(mymelody) / sizeof(mymelody[0]);
 int mysize2 = sizeof(mymelody2) / sizeof(mymelody2[0]);
 int mynoteDuration = 100;
@@ -43,7 +43,7 @@ void loop() {
 
   // 2. EXECUTION (Remove the '&& switchState == 0' condition)
   if (playmelody2 == 1) {
-      updateBuzzer(mymelody2, mysize2, mylastNoteTime, mynoteDuration, mybuzzerPin, mycurrentNote);
+      updateBuzzer(mymelody2, mysize2, mylastNoteTime, mynoteDuration2, mybuzzerPin, mycurrentNote);
       
       // Check if the melody is finished
       Serial.println(mysize2);
