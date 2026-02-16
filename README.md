@@ -88,4 +88,4 @@ ElevenLabs
 Gemini API
 
 # Devpost Link:
-https://devpost.com/software/no-one-bites-the-dust?ref_content=my-projects-tab&ref_feature=my_projects
+https://devpost.com/software/no-one-bites-the-dust
